@@ -1,51 +1,16 @@
 import { useState } from "react"
-const initialItems = [
-  {
-    id: 1,
-    description: "Passports",
-    quantity: 2,
-    packed: true
-  },
-  {
-    id: 2,
-    description: "socks",
-    quantity: 12,
-    packed: true
-  },
-]
 export default function App() {
-  const [items, setItems] = useState(initialItems)
-  const [description, setDescription] = useState("")
-  const [quantity, setQuantity] = useState(1)
-  function handelChangeItem(event) {
-    setDescription(event.target.value)
-  }
-  function handelChangeQuantity(event) {
-    setQuantity(event.target.value)
-  }
-  function handelAddItem() {
+  const [items, setItems] = useState([])
+  function handelAddItem(newItem) {
     setItems((item) => [
       ...item,
-      {
-        id: Date.now(),
-        description,
-        quantity,
-        packed: false
-      }
+      newItem
     ])
-  }
-  function handelSubmit(event) {
-    event.preventDefault()
-    if (description) {
-      handelAddItem()
-      setDescription("")
-      setQuantity(1)
-    } else return null
   }
   return (
     <div className="app">
       <Logo />
-      <Form handelSubmit={handelSubmit} item={items} handelAddItem={handelAddItem} handelChangeItem={handelChangeItem} handelChangeQuantity={handelChangeQuantity} quantity={quantity} description={description} />
+      <Form handelAddItem={handelAddItem} />
       <PackingList items={items} />
       <Stats items={items} />
     </div>
@@ -55,7 +20,29 @@ export default function App() {
 function Logo() {
   return (<h1>🌴Far Away💼</h1>)
 }
-function Form({ handelAddItem, item, handelSubmit, handelChangeQuantity, quantity, description, handelChangeItem }) {
+function Form({ handelAddItem }) {
+  const [description, setDescription] = useState("")
+  const [quantity, setQuantity] = useState(1)
+  const newItem = {
+    id: Date.now(),
+    quantity,
+    description,
+    packed: false
+  }
+  function handelSubmit(event) {
+    event.preventDefault()
+    if (description) {
+      handelAddItem(newItem)
+      setDescription("")
+      setQuantity(1)
+    } else return null
+  }
+  function handelChangeItem(event) {
+    setDescription(event.target.value)
+  }
+  function handelChangeQuantity(event) {
+    setQuantity(event.target.value)
+  }
   return (
     <form className="add-form" onSubmit={handelSubmit}>
       <h3>What do you need for your 😍 trip?</h3>
