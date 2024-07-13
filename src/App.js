@@ -7,11 +7,22 @@ export default function App() {
       newItem
     ])
   }
+  function handelDeleteItem(itemId) {
+    setItems((items) => items.filter((item) => item.id !== itemId))
+  }
+  function isPacked(id) {
+    setItems((items) => items.map((item) => (item.id === id ?
+      {
+        ...item,
+        packed: !item.packed
+      } : item
+    )))
+  }
   return (
     <div className="app">
       <Logo />
       <Form handelAddItem={handelAddItem} />
-      <PackingList items={items} />
+      <PackingList items={items} handelDeleteItem={handelDeleteItem} isPacked={isPacked} />
       <Stats items={items} />
     </div>
   )
@@ -31,7 +42,7 @@ function Form({ handelAddItem }) {
   }
   function handelSubmit(event) {
     event.preventDefault()
-    if (description) {
+    if (description.trim()) {
       handelAddItem(newItem)
       setDescription("")
       setQuantity(1)
@@ -54,17 +65,18 @@ function Form({ handelAddItem }) {
     </form>
   )
 }
-function PackingList({ items }) {
+function PackingList({ items, handelDeleteItem, isPacked }) {
   return <div className="list">
     <ul>
-      {items.map((item) => <Item key={item.id} item={item} />)}
+      {items.map((item) => <Item key={item.id} item={item} handelDeleteItem={handelDeleteItem} isPacked={isPacked} />)}
     </ul>
   </div>
 }
-function Item({ item }) {
+function Item({ item, isPacked, handelDeleteItem }) {
   return <li>
+    <input type="checkbox" value={item.packed} onChange={() => isPacked(item.id)} />
     <span style={item.packed ? { textDecoration: "line-through" } : {}}>{item.quantity} {item.description}</span>
-    <button>❌</button>
+    <button onClick={() => handelDeleteItem(item.id)}>❌</button>
   </li>
 }
 function Stats({ items }) {
