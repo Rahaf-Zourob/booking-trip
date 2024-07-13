@@ -56,7 +56,7 @@ function Form({ handelAddItem }) {
   }
   return (
     <form className="add-form" onSubmit={handelSubmit}>
-      <h3>What do you need for your 😍 trip?</h3>
+      <h2>What do you need for your 😍 trip?</h2>
       <select value={quantity} onChange={handelChangeQuantity}>
         {Array.from({ length: 20 }, (_, i) => i + 1).map(opt => <option key={opt} value={opt}>{opt}</option>)}
       </select>
