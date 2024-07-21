@@ -80,10 +80,19 @@ function Item({ item, isPacked, handelDeleteItem }) {
   </li>
 }
 function Stats({ items }) {
-  const packedNum = items.filter((packed) => packed.packed).length
+  const itemsNum = items.length
+  console.log(itemsNum)
+  if (!itemsNum) {
+    return <footer className="stats">
+      <em>Start adding some items to your packing list 🚀</em>
+    </footer>
+  }
+  const packedNum = items.filter((item) => item.packed).length
+  //!
+  const percentage = Math.round((packedNum / itemsNum) * 100) || 0
   return <footer className="stats">
     <em>
-      💼You have {items.length} item in your list, and tou already packed {packedNum}
+      {percentage === 100 ? "You got everything to go ✈️" : `💼You have ${itemsNum} item in your list, and tou already packed ${packedNum} (${percentage}%) `}
     </em>
   </footer>
 }
